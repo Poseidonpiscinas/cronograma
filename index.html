@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronograma</title>
+    <link rel="icon" href="imagens/1736106661099.png" type="image/x-icon">
+        <link rel="icon" href="imagens/1736106661099.png" sizes="16x16" />
+        <link rel="icon" href="imagens/1736106661099.png" sizes="32x32" type="image/png" />
+        <link rel="icon" href="imagens/1736106661099.png" sizes="48x48" type="image/png" />
+        <link rel="apple-touch-icon" href="imagens/1736106661099.png">
+    <style>
+        body {
+    display: grid;
+    background-image: url(imagens/agua.webp);
+    justify-items: center;
+    justify-content: center;
+}
+
+form#clienteForm {
+    margin: 40px;
+}
+button#salvarButton {
+    height: 31px;
+    margin: 30px;
+    width: 60px;
+}
+table {
+            width: 100%;
+            border-collapse: collapse;
+}
+table, th, td {
+            border: 1px solid black;
+}
+th, td {
+    background-color: white;
+    padding: 8px;
+    text-align: left;
+}
+    </style>
+</head>
+<body>
+    <h1>Cadastro de Clientes</h1>
+    
+    <!-- Formulário para adicionar clientes -->
+    <form id="clienteForm">
+        <label for="nome">Nome do Cliente:</label>
+        <input type="text" id="nome" name="nome" required>
+        <label for="observacoes">Observações:</label>
+        <input type="text" id="observacoes" name="observacoes" required>
+        <label for="finalizacao">Finalização:</label>
+        <input type="checkbox" id="finalizacao" name="finalizacao">
+        <button type="submit">Adicionar Cliente</button>
+    </form>
+
+    <!-- Tabela para exibir clientes -->
+    <table id="clientesTable">
+        <thead>
+            <tr>
+                <th>Nome do Cliente</th>
+                <th>Finalização</th>
+                <th>Observações</th>
+                <th>Hora</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <button id="salvarButton">Salvar</button>
+
+    <script>
+        // Função para adicionar cliente à tabela
+        document.getElementById('clienteForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            let nome = document.getElementById('nome').value;
+            let observacoes = document.getElementById('observacoes').value;
+            let finalizacao = document.getElementById('finalizacao').checked;
+            let hora = new Date().toLocaleTimeString();
+            
+            if (nome && observacoes) {
+                let tableBody = document.getElementById('clientesTable').getElementsByTagName('tbody')[0];
+                let row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${nome}</td>
+                    <td>${finalizacao ? 'Sim' : 'Não'}</td>
+                    <td>${observacoes}</td>
+                    <td>${hora}</td>
+                    <td><button class="removeButton">Remover</button></td>
+                `;
+                
+                // Adicionar evento de remover
+                row.querySelector('.removeButton').addEventListener('click', function() {
+                    row.remove();
+                });
+
+                // Limpar os campos de input
+                document.getElementById('nome').value = '';
+                document.getElementById('observacoes').value = '';
+                document.getElementById('finalizacao').checked = false;
+            }
+        });
+
+        // Função para salvar dados e redirecionar para outra página
+        document.getElementById('salvarButton').addEventListener('click', function() {
+            let tableRows = document.querySelectorAll('#clientesTable tbody tr');
+            let clientes = [];
+
+            tableRows.forEach(row => {
+                let nome = row.cells[0].textContent;
+                let finalizacao = row.cells[1].textContent === 'Sim';
+                let observacoes = row.cells[2].textContent;
+                let hora = row.cells[3].textContent;
+                clientes.push({ nome, finalizacao, observacoes, hora });
+            });
+
+            // Armazenar dados no localStorage com timestamp
+            let timestamp = new Date().getTime();
+            localStorage.setItem('clientes', JSON.stringify({ clientes, timestamp }));
+
+            // Redirecionar para a nova página de exibição
+            window.location.href = 'https://infinitycooperative.github.io/Poseidon/';
+        });
+    </script>
+</body>
+</html>
