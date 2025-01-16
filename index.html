@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administração de Clientes</title>
+    <style>
+        body {
+            background-image: url(imagens/agua.webp);
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            background-color: white;
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #e53935;
+        }
+        .btn-edit {
+            background-color: #4CAF50;
+        }
+        .btn-edit:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h2>Administração de Clientes</h2>
+    <button onclick="adicionarCliente()">Adicionar Cliente</button>
+    <table id="clientesTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Visitas</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="clientesTbody">
+            <!-- Dados dos clientes serão inseridos aqui -->
+        </tbody>
+    </table>
+
+    <script>
+        let clientes = [];
+
+        // Função para adicionar um novo cliente com verificação de senha
+        function adicionarCliente() {
+            const senha = prompt("Digite a senha para adicionar um cliente:");
+            if (senha === "074708") {
+                const nome = prompt("Digite o nome do cliente:");
+                if (nome) {
+                    const id = Math.floor(Math.random() * 1000); // Gera um ID único
+                    const cliente = { id, nome };
+                    clientes.push(cliente);
+                    atualizarTabela();
+                }
+            } else {
+                alert("Senha incorreta!");
+            }
+        }
+
+        // Função para atualizar a tabela de clientes
+        function atualizarTabela() {
+            const tbody = document.getElementById("clientesTbody");
+            tbody.innerHTML = "";
+            clientes.forEach(cliente => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${cliente.id}</td>
+                    <td>${cliente.nome}</td>
+                    <td><button onclick="visitarCliente(${cliente.id})">Visitar</button></td>
+                    <td>
+                        <button class="btn-edit" onclick="editarCliente(${cliente.id})">Editar</button>
+                        <button onclick="excluirCliente(${cliente.id})">Excluir</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Função para editar o nome do cliente
+        function editarCliente(id) {
+            const senha = prompt("Digite a senha para editar o cliente:");
+            if (senha === "074708") {
+                const cliente = clientes.find(c => c.id === id);
+                const novoNome = prompt("Digite o novo nome para o cliente:", cliente.nome);
+                if (novoNome) {
+                    cliente.nome = novoNome;
+                    atualizarTabela();
+                }
+            } else {
+                alert("Senha incorreta!");
+            }
+        }
+
+        // Função para excluir um cliente
+        function excluirCliente(id) {
+            const senha = prompt("Digite a senha para excluir o cliente:");
+            if (senha === "074708") {
+                if (confirm("Tem certeza que deseja excluir este cliente?")) {
+                    clientes = clientes.filter(c => c.id !== id);
+                    atualizarTabela();
+                }
+            } else {
+                alert("Senha incorreta!");
+            }
+        }
+
+        // Função para ir para a página de visita do cliente com senha
+        function visitarCliente(id) {
+            const senha = prompt("Digite a senha para acessar a visita do cliente:");
+            if (senha === "074708") {
+                const cliente = clientes.find(c => c.id === id);
+                window.location.href = `visita.html?id=${cliente.id}`; // Redireciona para a página de visitas
+            } else {
+                alert("Senha incorreta!");
+            }
+        }
+    </script>
+</body>
+</html>
