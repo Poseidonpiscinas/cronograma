@@ -131,7 +131,7 @@
             const senha = prompt("Digite a senha para acessar a visita do cliente:");
             if (senha === "074708") {
                 const cliente = clientes.find(c => c.id === id);
-                window.location.href = `visita.html?id=${cliente.id}`; // Redireciona para a página de visitas
+                window.location.href = `https://poseidonpiscinas.github.io/cliente/?id=${cliente.id}`; // Redireciona para a página de visitas
             } else {
                 alert("Senha incorreta!");
             }
